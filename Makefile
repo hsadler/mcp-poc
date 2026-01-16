@@ -1,13 +1,5 @@
-.PHONY: dev inspect install
+.PHONY: dev
 
-# Run MCP server in SSE mode for development
+# Launch MCP Inspector web UI for interactive development and testing
 dev:
-	cd mcp-server && uv run main.py --transport sse
-
-# Launch MCP Inspector web UI for interactive testing
-inspect:
-	cd mcp-server && npx @modelcontextprotocol/inspector uv run python main.py
-
-# Install dependencies
-install:
-	cd mcp-server && uv sync
+	npx @modelcontextprotocol/inspector uv run python mcp-server/main.py

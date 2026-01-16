@@ -1,4 +1,3 @@
-import argparse
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("Calculator")
@@ -12,13 +11,4 @@ async def add_numbers(a: float, b: float) -> str:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="MCP Calculator Server")
-    parser.add_argument(
-        "--transport",
-        choices=["stdio", "sse"],
-        default="stdio",
-        help="Transport mode: stdio (for Claude Desktop) or sse (for development)",
-    )
-    args = parser.parse_args()
-
-    mcp.run(transport=args.transport)
+    mcp.run(transport="stdio")

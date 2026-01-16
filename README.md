@@ -5,20 +5,19 @@ A simple proof of concept demonstrating a Model Context Protocol (MCP) server th
 ## Architecture
 
 - **MCP Server**: Python server using FastMCP that implements the MCP protocol
-- **Client**: Claude Desktop (connects to the MCP server automatically)
+- **Expected Client**: Claude Desktop (connects to the MCP server automatically)
 
 ## Features
 
 - MCP server with `add_numbers` tool
 - Automatic tool discovery by Claude Desktop
-- Dual transport support: stdio (production) and SSE (development)
+- MCP Inspector for interactive testing and debugging
 
 ## Prerequisites
 
-- Python 3.11+
 - [uv](https://github.com/astral-sh/uv) (Python package manager)
+- node and npx (install with brew: `brew install node`)
 - [Claude Desktop](https://claude.ai/download) (for production use)
-- Node.js with npx (for MCP Inspector)
 
 ## Quick Start
 
@@ -44,11 +43,7 @@ A simple proof of concept demonstrating a Model Context Protocol (MCP) server th
 
    Replace `/path/to/uv` with the output of `which uv` and `/path/to/mcp-poc` with the actual path to this project.
 
-4. Restart Claude Desktop (Cmd+Q to fully quit, then relaunch)
-
-5. Look for the hammer icon in Claude Desktop's chat input — this indicates MCP tools are available
-
-6. Start chatting! Try asking Claude to add numbers:
+4. Start chatting! Try asking Claude to add numbers:
    - "Can you add 42 and 58?"
    - "What is 123.45 plus 67.89?"
 
@@ -59,7 +54,7 @@ A simple proof of concept demonstrating a Model Context Protocol (MCP) server th
 The MCP Inspector provides a web UI for interactive testing of your tools:
 
 ```bash
-make inspect
+make dev
 ```
 
 This launches a web UI at `http://localhost:6274` where you can:
@@ -67,37 +62,6 @@ This launches a web UI at `http://localhost:6274` where you can:
 - Call tools with custom inputs
 - Inspect JSON-RPC messages
 - Debug server responses
-
-### Running in SSE Mode
-
-Alternatively, run the server in SSE mode for programmatic testing:
-
-```bash
-make dev
-```
-
-The server will start at `http://127.0.0.1:8000/sse`.
-
-### CLI Options
-
-```
-usage: main.py [-h] [--transport {stdio,sse}]
-
-MCP Calculator Server
-
-options:
-  -h, --help            show this help message and exit
-  --transport {stdio,sse}
-                        Transport mode: stdio (for Claude Desktop) or sse (for development)
-```
-
-### Makefile Commands
-
-| Command | Description |
-|---------|-------------|
-| `make inspect` | Launch MCP Inspector web UI at http://localhost:6274 |
-| `make dev` | Run server in SSE mode for development |
-| `make install` | Install dependencies |
 
 ## Project Structure
 
@@ -132,13 +96,3 @@ Claude will use the `add_numbers` tool and respond with the result.
 3. When you chat with Claude, it can discover and use the available tools
 4. Tool calls are sent to the MCP server via stdin, results returned via stdout
 5. Claude processes the result and responds in natural language
-
-## Technologies Used
-
-- **MCP Server**: Python 3.11, FastMCP
-- **Package Management**: uv
-- **Client**: Claude Desktop
-
-## License
-
-MIT
