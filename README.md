@@ -4,20 +4,21 @@ A simple proof of concept demonstrating a Model Context Protocol (MCP) server th
 
 ## Architecture
 
-- **MCP Server**: Python server using FastMCP that implements the MCP protocol with stdio transport
+- **MCP Server**: Python server using FastMCP that implements the MCP protocol
 - **Client**: Claude Desktop (connects to the MCP server automatically)
 
 ## Features
 
 - MCP server with `add_numbers` tool
 - Automatic tool discovery by Claude Desktop
-- Simple stdio-based communication
+- Dual transport support: stdio (production) and SSE (development)
 
 ## Prerequisites
 
 - Python 3.11+
 - [uv](https://github.com/astral-sh/uv) (Python package manager)
-- [Claude Desktop](https://claude.ai/download)
+- [Claude Desktop](https://claude.ai/download) (for production use)
+- Node.js with npx (for MCP Inspector)
 
 ## Quick Start
 
@@ -51,6 +52,53 @@ A simple proof of concept demonstrating a Model Context Protocol (MCP) server th
    - "Can you add 42 and 58?"
    - "What is 123.45 plus 67.89?"
 
+## Development
+
+### MCP Inspector (Recommended)
+
+The MCP Inspector provides a web UI for interactive testing of your tools:
+
+```bash
+make inspect
+```
+
+This launches a web UI at `http://localhost:6274` where you can:
+- View available tools and their schemas
+- Call tools with custom inputs
+- Inspect JSON-RPC messages
+- Debug server responses
+
+### Running in SSE Mode
+
+Alternatively, run the server in SSE mode for programmatic testing:
+
+```bash
+make dev
+```
+
+The server will start at `http://127.0.0.1:8000/sse`.
+
+### CLI Options
+
+```
+usage: main.py [-h] [--transport {stdio,sse}]
+
+MCP Calculator Server
+
+options:
+  -h, --help            show this help message and exit
+  --transport {stdio,sse}
+                        Transport mode: stdio (for Claude Desktop) or sse (for development)
+```
+
+### Makefile Commands
+
+| Command | Description |
+|---------|-------------|
+| `make inspect` | Launch MCP Inspector web UI at http://localhost:6274 |
+| `make dev` | Run server in SSE mode for development |
+| `make install` | Install dependencies |
+
 ## Project Structure
 
 ```
@@ -58,6 +106,7 @@ A simple proof of concept demonstrating a Model Context Protocol (MCP) server th
 ├── mcp-server/              # MCP Server (Python/FastMCP)
 │   ├── main.py             # MCP server with calculator tool
 │   └── pyproject.toml      # Python dependencies
+├── Makefile                 # Development commands
 └── README.md               # This file
 ```
 
